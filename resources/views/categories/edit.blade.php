@@ -34,11 +34,7 @@
                                     @enderror
                                 </div>
                             </div>
-
-
                             <div class="mb-3 row">
-
-
 
                              </div>
 

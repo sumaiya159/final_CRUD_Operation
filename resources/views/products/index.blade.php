@@ -33,15 +33,17 @@
                         <td>{{ $product->name }}</td>
                         <td>{{ $product->category->name }}</td>
                         <td>
-                            @if ($product->image){
-                                @if (exists('uploads/products'.$product->image)){
-                                    <img src="{{ asset('uploads/products' . $product->image) }}"
+                            @if ($product->image)
+                                @if (file_exists(public_path('uploads/products/' .$product->image)))
+                                    <img src="{{ asset('uploads/products/' . $product->image) }}"
                                    height="25" width="40">
-                                }
+
                                 @else
                                 <small>Image not exists in path</small>
                                 @endif
+                            @else
                                 <small>No Image</small>
+
                             @endif
                         </td>
                         <td class="text-center">{{ $product->price }}</td>
@@ -76,14 +78,6 @@
                     </tbody>
                 </table>
             </div>
-
-
-
-
-                  
-
-
-
         </div>
     </div>
 </div>

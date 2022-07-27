@@ -14,10 +14,10 @@
                 </div>
 
                 <div class="card-body">
-                    <form  method="post" action="{{ route('products.update', $product->id) }}">
+                    <form  method="post" action="{{ route('products.update', $product->id) }}" enctype="multipart/form-data">
                          @csrf
                          @method('PATCH')
-                         <div class="mb-3 row">
+                         <div class=" row mb-3">
                             <label for="name" class="col-md-4 col-form-label text-end">
                                 {{ __('Name') }} :
                             </label>
@@ -40,63 +40,57 @@
                                 {{ __('Category Name') }} :
                            </label>
                            <div class="col-md-6">
-                            <select class="form-control" name="category_name" value="{{ $product->category->name }}" required autocomplete="category_id" autofocus >
-                                @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
+                                <select class="form-control" name="category_id" required>
+                                    @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}"
+                                        @if ($category->id == $product->category_id) selected @endif >
+                                        {{ $category->name }}</option>
+                                    @endforeach
+                                </select>
 
-                            @error('category_name')
+                              @error('category_name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
-                          </div>
+                              @enderror
+                           </div>
                         </div>
-                        <div class="row mb-2">
-                            <label for="price" class="col-md-2 col-form-label">Price</label>
-                            <div class="col-md-10">
-                                <input type="number" id="price" class="form-control" value="{{ $product->price }}"
+                        <div class="row mb-3 ">
+                            <label for="price" class="col-md-4 col-form-label text-end">Price</label>
+                            <div class="col-md-6">
+                                <input type="number" id="price" class="form-control " value="{{ $product->price }}"
                                     name="price" placeholder="Enter Product price">
                             </div>
                         </div>
-
-
-                        <div class="row p-2">
-                            <label for="image" class="col-md-2 col-form-label">Image</label>
-                            <div class="col-md-8">
+                        <div class="row mb-2">
+                            <label for="image" class="col-md-4 col-form-label text-end">Image</label>
+                            <div class="col-md-6">
                                 <input type="file" id="image" class="form-control" value="{{ old('image') }}"
                                     name="image">
                             </div>
                             <div class="col-md-2">
-                                @if ($product->image && (exists('uploads/products'.$product->image)))
-                                <img src="{{ asset('uploads/products' . $product->image) }}"
-                                height="25" width="40">
+                                @if ($product->image)
+                                    @if (file_exists(public_path('uploads/products/' .$product->image)))
+                                        <img src="{{ asset('uploads/products/' . $product->image) }}"
+                                    height="25" width="40">
+
+                                    @else
+                                    <small>Image not exists in path</small>
+                                    @endif
                                 @else
-                                <small>No Image</small>
+                                    <small>No Image</small>
                                 @endif
                             </div>
                         </div>
 
 
-                        <div class="row p-2">
-                            <label for="description" class="col-md-2 col-form-label">Description</label>
-                            <div class="col-md-10">
+                        <div class="row mb-3">
+                            <label for="description" class="col-md-4 col-form-label text-end">Description</label>
+                            <div class="col-md-6">
                                 <textarea type="text" id="description" class="form-control" name="description"
                                     placeholder="Enter Product Details">{{ $product->description }}</textarea>
                             </div>
                         </div>
-
-
-
-
-
-
-
-
-
-
-
 
                         <div class="mb-3 row">
                           <label for="is_active" class="col-md-4 col-form-label text-end">
@@ -115,7 +109,6 @@
                                @enderror
                           </div>
                         </div>
-
                         <div class="mb-3 row">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn fs-5" style=" color:rgb(241, 169, 13) ;background-color: rgb(21, 21, 20)">

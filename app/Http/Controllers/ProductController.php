@@ -33,27 +33,25 @@ class ProductController extends Controller
     {
         $product = new Product();
 
-            $product->name = $request->name;
-            $product->category_id = $request->category_id;
-            $product->description = $request->description;
-            $product->price = $request->price;
-            $product->is_active = $request->is_active ? 1 : 0;
+        $product->name = $request->name;
+        $product->category_id = $request->category_id;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->is_active = $request->is_active ? 1 : 0;
+          
 
+        if($request->hasfile('image')){
 
-            if($request->hasfile('image')){
+            $file =$request->file('image');
+            $extension = $file ->getClientOriginalExtension();
+            $filename = time().'.'.$extension;
+            $file ->move('uploads/products' ,$filename);
+            $product->image =$filename;
+        }
 
-                $file =$request->file('image');
-                // $fileame = $this->file($file->getClientOriginalExtension());
-                 $extension = $file ->getClientOriginalExtension();
-                 $filename = time().'.'.$extension;
-                $file ->move('uploads/products' ,$filename);
-                $product->image =$filename;
-             }
+        $product->save();
 
-
-            $product->save();
-            return redirect()->route('products.index')->with('status','Product has been Created Successfully !');
-
+        return redirect()->route('products.index')->with('status','Product has been Created Successfully !');
 
     }
 
@@ -63,7 +61,6 @@ class ProductController extends Controller
         return view('products.show', compact('product'));
     }
 
-
     public function edit(Product $product)
     {
         $data['product'] = $product;
@@ -71,39 +68,36 @@ class ProductController extends Controller
         return view('products.edit', $data);
     }
 
-
     public function update(Request $request, Product $product)
     {
-        $product =  Product::all();
+         $product->name = $request->name;
+         $product->category_id = $request->category_id;
+         $product->description = $request->description;
+         $product->price = $request->price;
+         $product->is_active = $request->is_active ? 1 : 0;
 
-            $product->name = $request->name;
-            $product->category_id = $request->category_id;
-            $product->description = $request->description;
-            $product->price = $request->price;
-            $product->is_active = $request->is_active ? 1 : 0;
+         if ($request->hasFile('image')) {
 
+            $file =$request->file('image');
 
-            if($request->hasfile('image')){
-                $destination ='uploads/products'.$product->image;
-                if(File::exists($destination)){
-                    File::delete($destination);
+            $extension = $file ->getClientOriginalExtension();
+            $filename = time().'.'.$extension;
+            $file ->move('uploads/products/', $filename);
+
+            if ($product->image !== NULL) {
+                if (file_exists(public_path('uploads/products/'. $product->image ))) {
+                    unlink(public_path('uploads/products/'. $product->image ));
                 }
+            }
 
-                $file =$request->file('image');
-                $extension = $file ->getClientOriginalExtension();
-                $filename = (time).'.'.$extension;
-                $file ->move('uploads/products' ,$filename);
-                $product->image =$filename;
-             }
+             $product->image = $filename ;
+         }
 
+         $product->update();
 
-            $product->update();
-            return redirect()->route('products.index')->with('status','Product has been Updated successfully !');
-
+         return redirect()->route('products.index')->with('status','Product has been Updated Successfully !');
 
     }
-
-
 
     public function destroy(Product $product)
     {

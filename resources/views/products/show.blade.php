@@ -30,43 +30,50 @@
                             <strong>{{ $product->category->name }}</strong>
                         </div>
                     </div>
-                    <div class="row mb-1">
-                        <div class="col-3">
-                            <strong>Price :</strong>
-                        </div>
-                        <div class="col-9">
-                            {{ $product->price }}
+                    <div class="row mb-3">
+                        <label for="name" class="col-md-4 col-form-label text-end">
+                            Price :
+                        </label>
+                        <div class="col-md-6">
+                            <strong>{{ $product->price }}</strong>
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-3">
-                            <strong>Description :</strong>
-                        </div>
-                        <div class="col-9">
-                            {{ $product->description }}
+                        <label for="name" class="col-md-4 col-form-label text-end">
+                            Description :
+                            </label>
+                        <div class="col-md-6">
+                            <strong>{{ $product->description }}</strong>
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-3">
-                            <strong>Image :</strong>
-                            <div class="col-9">
-                                @if ($product->image && (exists('uploads/products'.$product->image)))
-                                <img src="{{ asset('uploads/products' . $product->image) }}"
+                            <lable class="col-md-4 col-form-label text-end">Image :</lable>
+                            <div class="col-md-8">
+                                @if ($product->image)
+                                @if (file_exists(public_path('uploads/products/' .$product->image)))
+                                    <img src="{{ asset('uploads/products/' .$product->image) }}"
                                 height="25" width="40">
+
+                                @else
+                                <small>Image not exists in path</small>
                                 @endif
+                            @else
+                                <small>No Image</small>
+                            @endif
 
                             </div>
-                        </div>
-
                     </div>
 
                     <div class="mb-3 row">
                         <label for="is_active" class="col-md-4 ms-5 col-form-label text-end">
                             Active Status :
                         </label>
-
                         <div class="col-md-6">
-                            <strong>{{ $product->is_active }}</strong>
+                            @if ($product->is_active===1)
+                            <strong>Active</strong>
+                            @else
+                            <strong>Inactive</strong>
+                            @endif
                         </div>
                     </div>
                  </div>

@@ -25,11 +25,9 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
+        <nav class="navbar navbar-expand-md  navbar-light shadow-sm "  >
+            <div style="background-color:rgb(196, 141, 37)" class="container-fluid">
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -37,7 +35,14 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
+                        <div class="card-body">
 
+
+                           <div class="">
+                            <a class=" text-black fs-3 fw-semibold ms-5 text-decoration-none" href="{{ route('categories.index')}}">Categories</a>
+                            <a class=" text-black fs-3 fw-semibold ms-5 text-decoration-none" href="{{ route('products.index')}}">Products</a>
+                           </div>
+                        </div>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -80,8 +85,22 @@
         </nav>
 
         <main class="py-4">
+            @if (session('status'))
+            <div class="alert alert-success" role="alert">
+                {{ session('status') }}
+            </div>
+        @endif
             @yield('content')
         </main>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    @stack('scripts')
+
+    <script>
+        $(document).ready(function() {
+                $("div.alert").delay(5000).slideUp(300);
+            });
+    </script>
 </body>
 </html>
